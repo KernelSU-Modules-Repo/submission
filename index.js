@@ -9,11 +9,11 @@ async function approve (token, owner, repo, issueNo, username, title) {
   if (result) {
     await leaveComment(token, owner, repo, issueNo,
       'Dear developer,\n\n' +
-      'We created a repository https://github.com/Xposed-Modules-Repo/' + title +
+      'We created a repository https://github.com/KernelSU-Modules-Repo/' + title +
       ' for you. You should find yourself as admin role of the repo now, if you ' +
       "don't, check your email to accept invitation. Enjoy!\n\n" +
       'To make your repository appear in the app and website, here is what you need to do,\n' +
-      "- Make sure you're not leaving the GitHub repo description blank, which indicates the Xposed module display name.\n" +
+      "- Make sure you're not leaving the GitHub repo description blank, which indicates the KernelSU module display name.\n" +
       '- Make sure you have at least one release.\n\n' +
       "If you complied with those requirements but your repo didn't appear in more than 10 minutes, please file an issue to let us know, thanks!\n\n" +
       'Welcome `' + title + '`!'
@@ -22,10 +22,10 @@ async function approve (token, owner, repo, issueNo, username, title) {
     await closeIssue(token, owner, repo, issueNo, true)
   } else {
     await leaveComment(token, owner, repo, issueNo,
-      'It seems like your package name is already in use, please consider another package name ' +
+      'It seems like your module ID is already in use, please consider another module ID ' +
       '(e.g. `io.github.' + username + '.' + title.split('.').slice(-1) + '`).\n' +
       "If you believe that's a fraudulent use, please contact a human by " +
-      'https://modules.lsposed.org/submission?type=appeal'
+      'https://modules.kernelsu.org/submission?type=appeal'
     )
     await setLabel(token, owner, repo, issueNo, 'conflict') // clear other labels
     await closeIssue(token, owner, repo, issueNo)
@@ -41,10 +41,10 @@ async function closeSpam (token, owner, repo, issueNo, username = '') { // pass 
 
 async function closeInvalid (token, owner, repo, issueNo, username) {
   await leaveComment(token, owner, repo, issueNo,
-    'It seems like your request has an invalid package name, please consider another package name ' +
+    'It seems like your request has an invalid module ID, please consider another module ID ' +
     '(e.g. `io.github.' + username + '.[appname]`).\n' +
     "If that's not true, please contact a human by " +
-    'https://modules.lsposed.org/submission?type=appeal'
+    'https://modules.kernelsu.org/submission?type=appeal'
   )
   await closeIssue(token, owner, repo, issueNo)
 }
@@ -83,7 +83,7 @@ async function run () {
         return
       }
 
-      // close invalid package name issue
+      // close invalid module ID issue
       if (prefixTag === 'invalid') {
         await closeInvalid(token, owner, repo, issueNo, username)
         return

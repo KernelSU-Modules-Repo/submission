@@ -11,7 +11,7 @@ function recognizeTitle (title) {
     ].indexOf(match[1]) !== -1) {
       if (match[1] === 'submission' || match[1] === 'transfer') {
         return {
-          type: checkPackageName(match[2]) ? match[1] : 'invalid',
+          type: checkModuleId(match[2]) ? match[1] : 'invalid',
           title: match[2]
         }
       }
@@ -27,16 +27,19 @@ function recognizeTitle (title) {
   }
 }
 
-function checkPackageName (packageName) {
-  if (!packageName.match(/\./)) return false
-  const groups = packageName.split('.')
-  for (const group of groups) {
-    if (!group.match(/^[a-zA-Z_][a-zA-Z_0-9]*$/) || group.toLowerCase() === 'example') return false
-  }
-  const blacklist = ['com.android', 'com.google', 'org.lsposed', 'io.github.lsposed']
+function checkModuleId (moduleId) {
+  // moduleId must match pattern: ^[a-zA-Z][a-zA-Z0-9._-]+$
+  if (!moduleId.match(/^[a-zA-Z][a-zA-Z0-9._-]+$/)) return false
+
+  // Blacklist check
+  const blacklist = ['com.android', 'com.google', 'org.lsposed', 'io.github.lsposed', 'org.kernelsu', 'io.github.kernelsu']
   for (const item of blacklist) {
-    if (packageName.toLowerCase().startsWith(item)) return false
+    if (moduleId.toLowerCase().startsWith(item)) return false
   }
+
+  // Disallow 'example' in moduleId
+  if (moduleId.toLowerCase().includes('example')) return false
+
   return true
 }
 
